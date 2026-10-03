@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#800000">
+    <meta name="description" content="SEIS lets AI agents autonomously evolve an entire LLM inference engine through accumulated code, experience, and shared discoveries. A research project from the University of Chicago.">
+    <title>SEIS: Self-Evolving Inference Systems</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css?v=2">
+    <script src="citation.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <h1><span class="project-name">SEIS:</span> Self-Evolving Inference Systems</h1>
+        <ul class="authors" aria-label="Authors">
+          <li>Zhen Xu</li>
+          <li>Jingyu Liu</li>
+          <li>Zongze Li</li>
+          <li>Tahseen Rabbani</li>
+          <li>Ce Zhang</li>
+        </ul>
+        <div class="hero-links">
+          <nav class="resources" aria-label="Project resources">
+            <a class="button button-primary" href="https://arxiv.org/abs/2610.04646" target="_blank" rel="noopener" title="Read the paper on arXiv">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>
+              Paper <span class="button-detail">arXiv</span>
+            </a>
+            <a class="button button-secondary" href="https://github.com/smth-fun/self-evolving-inference-system" target="_blank" rel="noopener" title="View code on GitHub">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-13-2 16"/></svg>
+              Code <span class="button-detail">GitHub</span>
+            </a>
+          </nav>
+          <a class="affiliation-logo" href="https://www.uchicago.edu/" target="_blank" rel="noopener">
+            <img src="assets/university-of-chicago.svg" alt="University of Chicago" width="270" height="94">
+          </a>
+        </div>
+        <p class="tagline">Let AI agents evolve the <span class="tagline-emphasis">entire inference engine.</span></p>
+      </header>
+
+      <section class="overview section" id="idea" aria-labelledby="overview-title">
+        <p class="eyebrow">The idea</p>
+        <h2 id="overview-title">Autonomous optimization.<br>Across the whole inference stack.</h2>
+        <p class="intro">Faster inference makes language models cheaper to serve. <strong>SEIS gives AI agents a working inference engine and lets them improve it end to end.</strong> Across successive sessions, agents investigate bottlenecks, rewrite code, test their changes, and build on the code and reports left by earlier sessions. Parallel chains can also exchange discoveries.</p>
+        <p class="overview-detail">Starting from mini-sglang, the agents developed optimized GPU kernels, fused operators, improved runtime execution, and prompt-lookup speculative decoding. The agent stays fixed throughout; the engine's implementation evolves.</p>
+
+        <figure class="protocol-figure">
+          <a class="protocol-image-link" href="assets/seis-protocol.png" target="_blank" rel="noopener" aria-label="Open the full-resolution SEIS protocol diagram">
+            <img src="assets/seis-protocol.png" width="3000" height="1363" loading="lazy" decoding="async" alt="SEIS protocol: agents optimize and evaluate an engine, inherit code and reports, and work through independent branches, sequential chains, or synchronized chains.">
+          </a>
+          <figcaption>Engine code and reports pass between sessions; synchronized chains share discoveries. <span class="figure-hint">Click to enlarge.</span></figcaption>
+        </figure>
+      </section>
+
+      <section class="results section" aria-labelledby="results-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">The result</p><h2 id="results-title">An evolved engine.<br>A substantial speedup.</h2></div>
+          <p class="experiment-label"><span>Qwen3-0.6B · NVIDIA H100</span><span>Single-request inference</span></p>
+        </div>
+        <div class="results-grid">
+          <div class="metrics">
+            <div class="metric metric-main"><p class="metric-value">3.27<span>×</span></p><p class="metric-label">throughput over the original engine</p><p class="metric-detail">594 → 1,942 tokens / second</p></div>
+            <div class="secondary-metrics">
+              <div class="metric"><p class="metric-value">89 <span>ms</span></p><p class="metric-label">mean request latency</p><p class="metric-detail">down from 295 ms</p></div>
+              <div class="metric"><p class="metric-value">3.08<span>×</span></p><p class="metric-label">without speculation</p><p class="metric-detail">from kernel and runtime changes</p></div>
+            </div>
+          </div>
+          <figure class="throughput-chart">
+            <div class="chart-heading"><h3>Natural-request throughput</h3><span>tokens / second ↑</span></div>
+            <dl class="chart-bars">
+              <div class="chart-row"><dt>mini-sglang <span>original</span></dt><dd><div class="bar-track"><div class="bar" style="--bar-width: 30.587%"></div></div><span class="bar-value">594</span></dd></div>
+              <div class="chart-row"><dt>vLLM</dt><dd><div class="bar-track"><div class="bar" style="--bar-width: 32.595%"></div></div><span class="bar-value">633</span></dd></div>
+              <div class="chart-row"><dt>SGLang</dt><dd><div class="bar-track"><div class="bar" style="--bar-width: 32.235%"></div></div><span class="bar-value">626</span></dd></div>
+              <div class="chart-row"><dt>TensorRT-LLM</dt><dd><div class="bar-track"><div class="bar" style="--bar-width: 35.530%"></div></div><span class="bar-value">690</span></dd></div>
+              <div class="chart-row chart-row-seis"><dt>SEIS <span>best engine</span></dt><dd><div class="bar-track"><div class="bar" style="--bar-width: 100%"></div></div><span class="bar-value">1,942</span></dd></div>
+            </dl>
+            <figcaption>100 natural-length requests, with prefill included. Throughput is the median of three repetitions. Production configurations were selected on development data. See Figure 1 and Appendix E of the paper.</figcaption>
+          </figure>
+        </div>
+        <p class="accuracy-note"><span class="note-marker" aria-hidden="true"></span><span>The best engine's observed accuracy changes were <strong>+1.06 percentage points on GSM8K</strong> and <strong>−0.37 on long-input retrieval</strong>, relative to the original engine.</span></p>
+      </section>
+
+      <section class="takeaways section" aria-labelledby="takeaways-title">
+        <p class="eyebrow">What we learn</p>
+        <h2 id="takeaways-title">Better systems through accumulated work.</h2>
+        <div class="takeaway-grid">
+          <article><span class="takeaway-number">01 / Experience</span><h3>Build on earlier sessions.</h3><p>Inherited code and reports let agents combine improvements over time. In these experiments, sustained chains outperform independent attempts.</p></article>
+          <article><span class="takeaway-number">02 / Collaboration</span><h3>Share useful discoveries.</h3><p>Exchanging code across chains spreads working designs. The best engine combines its own kernels and runtime with a peer's decoding policy.</p></article>
+          <article><span class="takeaway-number">03 / Evaluation</span><h3>Keep checking capability.</h3><p>Speed and development checks tell only part of the story. Held-out task evaluation and code inspection expose failures that the optimization score misses.</p></article>
+        </div>
+      </section>
+
+      <section class="citation" id="citation" aria-labelledby="citation-title">
+        <h2 id="citation-title">Citation</h2>
+        <div class="citation-box">
+          <div class="citation-toolbar">
+            <span>BibTeX</span>
+            <button class="copy-citation" type="button" aria-label="Copy BibTeX citation" aria-controls="bibtex">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V4H4v12h4"/></svg>
+              <span data-copy-label>Copy BibTeX</span>
+            </button>
+          </div>
+          <pre><code id="bibtex">@article{xu2026seis,
+  title   = {{SEIS}: Self-Evolving Inference Systems},
+  author  = {Xu, Zhen and Liu, Jingyu and Li, Zongze and
+             Rabbani, Tahseen and Zhang, Ce},
+  journal = {arXiv preprint arXiv:2610.04646},
+  year    = {2026}
+}</code></pre>
+        </div>
+        <p class="copy-status" role="status" aria-live="polite"></p>
+      </section>
+
+      <footer><span>SEIS · Self-Evolving Inference Systems</span></footer>
+    </main>
+  </body>
+</html>
